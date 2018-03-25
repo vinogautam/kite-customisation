@@ -27,7 +27,7 @@ function check_buy(trend){
     
     setTimeout(function(){
 			check_buy(trend);
-    }, 150000);
+    }, 70000);
   }, 2000);
 }
 
@@ -84,11 +84,15 @@ if(href.indexOf('https://chartink.com/screener/') !== -1){
 	angular.module('todoApp', [])
 		.filter('startFrom', function() {
 		    return function(input, start) {
-		        start = +start; //parse to int
-		        return input.slice(start);
+		    	if(input === undefined) {
+		    		return [];
+		    	} else {
+		    		start = +start; //parse to int
+		        	return input.slice(start);
+		    	}
 		    }
 		})
-	  .controller('TodoListController', function($scope) {
+	  .controller('TodoListController', function($scope, $timeout) {
 
 	  	textchatref.on('value', function(snapshot) {
 	  		 var results = snapshot.val();
@@ -113,10 +117,19 @@ if(href.indexOf('https://chartink.com/screener/') !== -1){
 	  		 console.log(new_resuts);
 	  		 $scope.$apply(function(){
 	  		 	$scope.screener_result = angular.copy(new_resuts);
-	  		 	$scope.currentPage = 0;
 	  		 });
 	  	});
 
+	  	$scope.screener_change = function(){
+	  		$scope.currentPage = 0;
+	  		$scope.noOfPage = Math.ceil($scope.screener_result[$scope.screener].length / 2);
+	  		$scope.show_data = false;
+	  		$timeout(function(){
+	  			$scope.show_data = true;
+	  		}, 500);
+	  	};
+
+	  	$scope.show_data = false;
 	  	$scope.screener = '';
 	  	$scope.currentPage = 0;
 
@@ -144,18 +157,19 @@ if(href.indexOf('https://chartink.com/screener/') !== -1){
 		        	<div ng-if="toggle" class="page-content">
 		        		<div>
 		        			<label>Screener</label>
-		        			<select ng-model="screener">
+		        			<select ng-model="$parent.screener" ng-change="screener_change();">
 		        				<option value="">Select Screener</option>
-		        				<option ng-repeat="(k,v) in screener_result" ng-show="v.length" value="{{k}}">{{k}}</option>
+		        				<option ng-repeat="(k,v) in screener_result" ng-show="v.length" value="{{k}}">{{k}}({{v.length}})</option>
 		        			</select>
-		        			<div class="pagination">
-		        				<span class="change-indicator icon icon-chevron-left"></span>
-		        				<span class="change-indicator icon icon-chevron-right"></span>
+		        			<div ng-show="screener" class="pagination">
+		        				<span>{{currentPage+1}} out of {{noOfPage}} page</span
+		        				<span ng-hide="currentPage === 0" ng-click="currentPage = currentPage - 1;" class="change-indicator icon icon-chevron-left"></span>
+		        				<span ng-hide="currentPage === noOfPage - 1" ng-click="currentPage = currentPage + 1;" class="change-indicator icon icon-chevron-right"></span>
 		        			</div>
 		        		</div>
 		        		<div>
-		        			<div ng-if="screener" ng-repeat="stock in screener_result[screener] | startFrom:currentPage*2 | limitTo:2  track by $index">
-		        				<iframe src="{{stock.src}}"></iframe>
+		        			<div ng-if="screener && show_data" ng-repeat="stock in screener_result[screener] | startFrom:currentPage*2 | limitTo:2  track by $index">
+		        				<iframe ng-src="{{stock.src}}"></iframe>
 		        				<div class="stock_container">
 		        					<h4>{{stock.name}}</h4>
 		        					<div>
@@ -196,6 +210,6 @@ if(href.indexOf('https://chartink.com/screener/') !== -1){
 		    	$('body').prepend($compile($template)($rootScope)); 
 		    }
 		  });
-	  }, 10000);
+	  }, 5000);
 	  
 }
