@@ -33,31 +33,32 @@ function check_buy(trend){
 
 
 
-//data = {exchange:'NSE', tradingsymbol:'DBL', transaction_type:'SELL', order_type:'MARKET', quantity:'1', price:'0', product:'CNC', validity:'DAY', disclosed_quantity:'0', trigger_price:'0', squareoff:'0', stoploss:'0', trailing_stoploss:'0', variety:'regular'}
+function order_req(order, token){
 
+	$.ajax({
+	    url: 'https://kite.zerodha.com/api/orders/'+order.variety,
+	    type: 'post',
+	    data: order,
+	    xhr: function() {
+	        var xhr = jQuery.ajaxSettings.xhr();
+	        var setRequestHeader = xhr.setRequestHeader;
+	        xhr.setRequestHeader = function(name, value) {
+	            if (name == 'X-Requested-With') return;
+	            setRequestHeader.call(this, name, value);
+	        }
+	        return xhr;
+	    },
+	    headers: {
+	        'X-CSRFToken': token,
+	        'X-Kite-Version': '1.1.14'
+	    },
+	    dataType: 'json',
+	    success: function (data) {
+	        console.info(data);
+	    }
+	});
 
-/*$.ajax({
-    url: 'https://kite3.zerodha.com/api/orders/regular',
-    type: 'post',
-    data: data,
-    xhr: function() {
-        var xhr = jQuery.ajaxSettings.xhr();
-        var setRequestHeader = xhr.setRequestHeader;
-        xhr.setRequestHeader = function(name, value) {
-            if (name == 'X-Requested-With') return;
-            setRequestHeader.call(this, name, value);
-        }
-        return xhr;
-    },
-    headers: {
-        'X-CSRFToken': 'koiCdAZlEuH1TkJ3TqmOGxVPX2V65wHD',
-        'X-Kite-Version': '1.1.7'
-    },
-    dataType: 'json',
-    success: function (data) {
-        console.info(data);
-    }
-});*/
+}
 
 function getCookie(cname) {
     var name = cname + "=";
@@ -105,10 +106,10 @@ if(href.indexOf('https://chartink.com/screener/') !== -1){
 	  		 		});
 	  		 		if(filter_sym.length){
 	  		 			i2.id = angular.copy(filter_sym[0].id);
-	  		 			i2.qty = 10;
-	  		 			i2.sl = 2;
-	  		 			i2.tg = 5;
-	  		 			i2.tsl = 2;
+	  		 			i2.quantity = 10;
+	  		 			i2.stoploss = 2;
+	  		 			i2.squareoff = 5;
+	  		 			i2.trailing_stoploss = 2;
 	  		 			i2.src = 'https://kite.zerodha.com/static/build/chart.html?v=1.1.12#token='+i2.id+'&symbol='+i2.symbol+'&segment=NSE&volume=true&public_token='+$scope.public_token+'&user_id='+$scope.user_id+'&inapp=true';
 	  		 			new_resuts[k].push(angular.copy(i2));
 	  		 		}
@@ -151,6 +152,14 @@ if(href.indexOf('https://chartink.com/screener/') !== -1){
 	  		$timeout(function(){
 	  			$scope.show_data = true;
 	  		}, 500);
+	    };
+
+	    $scope.order_req = function(od, transaction_type, product, variety, order_type){
+	    	var data = {exchange:'NSE', tradingsymbol:od.symbol, transaction_type:transaction_type, 
+			order_type:order_type, quantity:od.quantity, price:od.price, product:product, validity:'DAY', 
+			disclosed_quantity:'0', trigger_price:'0', squareoff:od.squareoff, stoploss:od.stoploss, 
+			trailing_stoploss:od.trailing_stoploss, variety:variety};
+	    	order_req(data, $scope.public_token);
 	    };
 
 	    $scope.user_id = getCookie('user_id');
@@ -197,22 +206,25 @@ if(href.indexOf('https://chartink.com/screener/') !== -1){
 		        					</div>
 		        					<hr>
 		        					<div class="stock_data">
-		        						QTY<input ng-model="stock.qty">&nbsp;
-		        						SL<input ng-model="stock.sl">&nbsp;
-		        						TGT<input ng-model="stock.tg">&nbsp;
-		        						TSL<input ng-model="stock.tsl">&nbsp;
+		        						PRICE<input style="width:150px;" ng-model="stock.price"><br>
+		        						QTY<input ng-model="stock.quantity">&nbsp;
+		        						SL<input ng-model="stock.stoploss">&nbsp;
+		        						TGT<input ng-model="stock.squareoff">&nbsp;
+		        						TSL<input ng-model="stock.trailing_stoploss">&nbsp;
 		        					</div>
 		        					<hr>
 		        					<div class="stock_buy">
-		        						<button class="button-blue">CNC</button>
-		        						<button class="button-blue">MIS</button>
-		        						<button class="button-blue">BO</button>
+		        						<button ng-click="order_req(stock, 'BUY', 'CNC', 'regular', 'MARKET')" class="button-blue">CNC</button>
+		        						<button ng-click="order_req(stock, 'BUY', 'MIS', 'regular', 'MARKET')" class="button-blue">MIS-M</button>
+		        						<button ng-click="order_req(stock, 'BUY', 'MIS', 'regular', 'LIMIT')" class="button-blue">MIS-L</button>
+		        						<button ng-click="order_req(stock, 'BUY', 'MIS', 'bo', 'LIMIT')" class="button-blue">BO</button>
 		        					</div>
 		        					<hr>
 		        					<div class="stock_sell">
-		        						<button class="button-orange">CNC</button>
-		        						<button class="button-orange">MIS</button>
-		        						<button class="button-orange">BO</button>
+		        						<button ng-click="order_req(stock, 'SELL', 'CNC', 'regular', 'MARKET')" class="button-orange">CNC</button>
+		        						<button ng-click="order_req(stock, 'SELL', 'CNC', 'regular', 'MARKET')" class="button-orange">MIS</button>
+		        						<button ng-click="order_req(stock, 'SELL', 'CNC', 'regular', 'LIMIT')" class="button-orange">MIS</button>
+		        						<button ng-click="order_req(stock, 'SELL', 'CNC', 'bo', 'LIMIT')" class="button-orange">BO</button>
 		        					</div>
 		        				</div>
 
