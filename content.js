@@ -163,8 +163,8 @@ if(href.indexOf('https://chartink.com/screener/') !== -1){
 		        			</select>
 		        			<div ng-show="screener" class="pagination">
 		        				<span>{{currentPage+1}} out of {{noOfPage}} page</span
-		        				<span ng-hide="currentPage === 0" ng-click="currentPage = currentPage - 1;" class="change-indicator icon icon-chevron-left"></span>
-		        				<span ng-hide="currentPage === noOfPage - 1" ng-click="currentPage = currentPage + 1;" class="change-indicator icon icon-chevron-right"></span>
+		        				<span ng-hide="currentPage === 0" ng-click="$parent.currentPage = currentPage - 1;" class="change-indicator icon icon-chevron-left"></span>
+		        				<span ng-hide="currentPage === noOfPage - 1" ng-click="$parent.currentPage = currentPage + 1;" class="change-indicator icon icon-chevron-right"></span>
 		        			</div>
 		        		</div>
 		        		<div>
