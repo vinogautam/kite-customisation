@@ -206,8 +206,8 @@ if(href.indexOf('https://chartink.com/screener/') !== -1){
 		        					</div>
 		        					<hr>
 		        					<div class="stock_data">
-		        						PRICE<input style="width:150px;" ng-model="stock.price"><br>
-		        						QTY<input ng-model="stock.quantity">&nbsp;
+		        						PRICE<input style="width:75px;" ng-model="stock.price">&nbsp;
+		        						QTY<input ng-model="stock.quantity"><br>
 		        						SL<input ng-model="stock.stoploss">&nbsp;
 		        						TGT<input ng-model="stock.squareoff">&nbsp;
 		        						TSL<input ng-model="stock.trailing_stoploss">&nbsp;
