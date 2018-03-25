@@ -15,7 +15,7 @@
     height: 350px;
     border: none;
 }
-
+.pagination{float:right;}
 .kiteCustomization .stock_container{
 	float: right;
 	width: 28%;
@@ -28,6 +28,20 @@
 }
 .kiteCustomization .stock_data input{width: 20px;}
 .kiteCustomization .stock_price{font-size: 25px;}
+.kiteCustomization select{width: 200px;
+    border: 1px solid #ccc;
+    height: 30px;
+    border-radius: 2px;
+    margin-left: 10px;
+    box-shadow: 0 0 5px 0 #ccc inset;
+    padding: 0 10px;}
+	.kiteCustomization input{ border: 1px solid #ccc;    
+    border-radius: 2px;
+    margin-left: 10px;
+    box-shadow: 0 0 5px 0 #ccc inset;
+    padding: 0 10px; margin-bottom:10px;}
+	.stock_buy button,.stock_sell button{    padding: 5px 10px;
+    margin-bottom: 5px;}
 .switch {
   position: relative;
   display: inline-block;
