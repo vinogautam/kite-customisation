@@ -137,6 +137,22 @@ if(href.indexOf('https://chartink.com/screener/') !== -1){
 	    	$(".container-right .page-content").toggle();
 	    };
 
+	    $scope.previous_page = function(){
+	    	$scope.currentPage--;
+	    	$scope.show_data = false;
+	  		$timeout(function(){
+	  			$scope.show_data = true;
+	  		}, 500);
+	    };
+
+	    $scope.next_page = function(){
+	    	$scope.currentPage++;
+	    	$scope.show_data = false;
+	  		$timeout(function(){
+	  			$scope.show_data = true;
+	  		}, 500);
+	    };
+
 	    $scope.user_id = getCookie('user_id');
 	    $scope.public_token = getCookie('public_token');
 
@@ -162,9 +178,9 @@ if(href.indexOf('https://chartink.com/screener/') !== -1){
 		        				<option ng-repeat="(k,v) in screener_result" ng-show="v.length" value="{{k}}">{{k}}({{v.length}})</option>
 		        			</select>
 		        			<div ng-show="screener" class="pagination">
-		        				<span>{{currentPage+1}} out of {{noOfPage}} page</span
-		        				<span ng-hide="currentPage === 0" ng-click="$parent.currentPage = currentPage - 1;" class="change-indicator icon icon-chevron-left"></span>
-		        				<span ng-hide="currentPage === noOfPage - 1" ng-click="$parent.currentPage = currentPage + 1;" class="change-indicator icon icon-chevron-right"></span>
+		        				<span>{{currentPage+1}} out of {{noOfPage}} page</span>
+		        				<span ng-hide="currentPage === 0" ng-click="previous_page();" class="change-indicator icon icon-chevron-left"></span>
+		        				<span ng-hide="currentPage === noOfPage - 1" ng-click="next_page();" class="change-indicator icon icon-chevron-right"></span>
 		        			</div>
 		        		</div>
 		        		<div>
