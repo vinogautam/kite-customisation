@@ -1,0 +1,20 @@
+{
+  "name": "Kite Cuztomization",
+  "version": "1.1",
+  "description": "A nice HTML5 trading app built with speed, simplicity, and ease of use in mind. Built exclusively for Zerodha clients.",
+  "permissions": [
+    "bookmarks"
+  ],
+  "browser_action": {
+      "default_title": "Kite Cuztomization",
+      "default_icon": "icon.png"
+  },
+  "manifest_version": 2,
+  "content_scripts": [
+    {
+      "matches": ["https://kite.zerodha.com/*", "https://chartink.com/screener/*", "http://localhost/*"],
+      "js": ["jquery.js", "angular.js", "firebase.js", "instrument.js", "content.js"],
+      "css": ["style.css"]
+    }
+  ]
+}
