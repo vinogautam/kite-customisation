@@ -222,8 +222,8 @@ if(href.indexOf('https://chartink.com/screener/') !== -1){
 		        					<hr>
 		        					<div class="stock_sell">
 		        						<button ng-click="order_req(stock, 'SELL', 'CNC', 'regular', 'MARKET')" class="button-orange">CNC</button>
-		        						<button ng-click="order_req(stock, 'SELL', 'CNC', 'regular', 'MARKET')" class="button-orange">MIS</button>
-		        						<button ng-click="order_req(stock, 'SELL', 'CNC', 'regular', 'LIMIT')" class="button-orange">MIS</button>
+		        						<button ng-click="order_req(stock, 'SELL', 'CNC', 'regular', 'MARKET')" class="button-orange">MIS-M</button>
+		        						<button ng-click="order_req(stock, 'SELL', 'CNC', 'regular', 'LIMIT')" class="button-orange">MIS-L</button>
 		        						<button ng-click="order_req(stock, 'SELL', 'CNC', 'bo', 'LIMIT')" class="button-orange">BO</button>
 		        					</div>
 		        				</div>
